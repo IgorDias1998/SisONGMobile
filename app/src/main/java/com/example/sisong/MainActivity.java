@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        txtUsername.setText("");
+                        txtSenha.setText("");
                         LoginResponse loginResponse = response.body();
                         Toast.makeText(MainActivity.this, loginResponse.getMensagem(), Toast.LENGTH_SHORT).show();
 
