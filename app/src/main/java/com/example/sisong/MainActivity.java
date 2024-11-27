@@ -47,13 +47,17 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show();
             return;
         } else if (username.equals("admin") && senha.equals("admin")) {
+            // Login simples para verificar o usuário administrador
             txtUsername.setText("");
             txtSenha.setText("");
             Intent intent = new Intent(MainActivity.this, Administrador.class);
             startActivity(intent);
         } else {
+            //Aqui gera uma nova instância para a requisição de login, enviando Username e senha
             LoginRequest loginRequest = new LoginRequest(username, senha);
+            // Aqui instancia a interface ApiService
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
+            //Aqui faz a chamada para o EndPoint Login
             Call<LoginResponse> call = apiService.login(loginRequest);
 
             call.enqueue(new Callback<LoginResponse>() {
@@ -65,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
                         LoginResponse loginResponse = response.body();
                         Toast.makeText(MainActivity.this, loginResponse.getMensagem(), Toast.LENGTH_SHORT).show();
 
+                        //Recebe o id do doador
                         int doadorId = loginResponse.getDoador().getDoadorId();
                         Log.d("Login", "Doador ID: " + doadorId);
 
+                        //Invoca a nova tela, enviando para ela o UserName e Id, para salvar a doação
                         Intent intent = new Intent(MainActivity.this, TelaDoacao.class);
                         intent.putExtra("userName", response.body().getDoador().getNomeDoador());
                         intent.putExtra("userId", response.body().getDoador().getDoadorId());
@@ -86,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-
     private void telaCadastro(){
         Intent intent = new Intent(MainActivity.this, CadastroDoador.class);
         startActivity(intent);

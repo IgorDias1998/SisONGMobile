@@ -33,49 +33,49 @@ public class TelaDoacao extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_doacao);
 
-        TextView tvUserName = findViewById(R.id.tvUserName);
-        EditText etDoacao = findViewById(R.id.etDoacao);
-        Button btnDoar = findViewById(R.id.btnDoar);
-        Button btnSair = findViewById(R.id.btnSair);
+        tvUserName = findViewById(R.id.tvUserName);
+        etDoacao = findViewById(R.id.etDoacao);
+        btnDoar = findViewById(R.id.btnDoar);
+        btnSair = findViewById(R.id.btnSair);
 
         // Receber o nome do usuário da tela de login
         Intent intent = getIntent();
         String userName = intent.getStringExtra("userName");
-        int userId = intent.getIntExtra("userId", -1); // ID do usuário
+        int userId = intent.getIntExtra("userId", -1);
 
         // Exibir o nome do usuário
         tvUserName.setText("Olá, " + userName);
 
+        //Exibe as doações a partir do Id do Usuário recebido
         minhasDoacoes(userId);
 
         btnDoar.setOnClickListener(v -> {
-            String donationValueStr = etDoacao.getText().toString();
+            String doacaoValorStr = etDoacao.getText().toString();
 
-            if (donationValueStr.isEmpty()) {
+            if (doacaoValorStr.isEmpty()) {
                 Toast.makeText(this, "Por favor, insira um valor.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Converter valor para decimal
-            double donationValue = Double.parseDouble(donationValueStr);
+            double doacaoValor = Double.parseDouble(doacaoValorStr);
 
-            // Chamar a API para registrar a doação
-            makeDonation(userId, donationValue);
+            // Chamar a API para registrar a doação passando os parâmetros Id e Valor
+            realizarDoacao(userId, doacaoValor);
         });
 
         btnSair.setOnClickListener(v -> finish());
-
     }
 
-    private void makeDonation(int userId, double donationValue) {
-        // Cria o objeto de doação
-        Doacao donation = new Doacao(userId, donationValue);
+    private void realizarDoacao(int userId, double doacaoValor) {
+        Doacao doacao = new Doacao(userId, doacaoValor);
 
         // Chama a API
-        ApiClient.getClient().create(ApiService.class).fazerDoacao(donation).enqueue(new Callback<Void>() {
+        ApiClient.getClient().create(ApiService.class).fazerDoacao(doacao).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    minhasDoacoes(userId);
                     Toast.makeText(TelaDoacao.this, "Doação realizada com sucesso!", Toast.LENGTH_LONG).show();
                     etDoacao.setText("");
                 } else {
@@ -91,7 +91,6 @@ public class TelaDoacao extends AppCompatActivity {
     }
 
     private void minhasDoacoes(int userId) {
-        // Chama a API
         ApiClient.getClient().create(ApiService.class).getMinhasDoacoes(userId).enqueue(new Callback<List<Doacao>>() {
             @Override
             public void onResponse(Call<List<Doacao>> call, Response<List<Doacao>> response) {

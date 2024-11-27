@@ -59,8 +59,8 @@
         android:id="@+id/scrollView4"
         android:layout_width="350dp"
         android:layout_height="200dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7">
 
