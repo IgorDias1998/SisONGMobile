@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
                         //Invoca a nova tela, enviando para ela o UserName e Id, para salvar a doação
                         Intent intent = new Intent(MainActivity.this, TelaDoacao.class);
-                        intent.putExtra("userName", response.body().getDoador().getNomeDoador());
-                        intent.putExtra("userId", response.body().getDoador().getDoadorId());
+                        Doador doador = response.body().getDoador();
+                        intent.putExtra("usuarioLogado", doador);
                         startActivity(intent);
 
                     } else {

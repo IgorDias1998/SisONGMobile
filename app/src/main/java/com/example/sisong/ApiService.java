@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -27,4 +28,7 @@ public interface ApiService {
 
     @GET("api/Doacao/minhas-doacoes/{id}")
     Call<List<Doacao>> getMinhasDoacoes(@Path("id") int id);
+
+    @PUT("api/Doador/{id}")
+    Call<Void> editarDoador(@Path("id") int id, @Body Doador doadorAtualizado);
 }

@@ -1,5 +1,8 @@
 package com.example.sisong;
-public class Doador {
+
+import java.io.Serializable;
+
+public class Doador implements Serializable {
     private int doadorId;
     private String nomeDoador;
     private String username;

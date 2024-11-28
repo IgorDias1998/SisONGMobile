@@ -25,7 +25,7 @@ public class TelaDoacao extends AppCompatActivity {
 
     private TextView tvUserName, txtMinhasDoacoes;
     private EditText etDoacao;
-    private Button btnDoar, btnSair;
+    private Button btnDoar, btnSair, btnEdicaoPerfil;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,17 +37,19 @@ public class TelaDoacao extends AppCompatActivity {
         etDoacao = findViewById(R.id.etDoacao);
         btnDoar = findViewById(R.id.btnDoar);
         btnSair = findViewById(R.id.btnSair);
+        btnEdicaoPerfil = findViewById(R.id.btnEdicaoPerfil);
 
-        // Receber o nome do usuário da tela de login
         Intent intent = getIntent();
-        String userName = intent.getStringExtra("userName");
-        int userId = intent.getIntExtra("userId", -1);
+        Doador usuarioLogado = (Doador) intent.getSerializableExtra("usuarioLogado");
+        if (usuarioLogado != null) {
+            tvUserName.setText("Olá, " + usuarioLogado.getNomeDoador());
+            minhasDoacoes(usuarioLogado.getDoadorId());
+        } else {
+            Toast.makeText(this, "Erro ao carregar dados do usuário.", Toast.LENGTH_SHORT).show();
+        }
 
-        // Exibir o nome do usuário
-        tvUserName.setText("Olá, " + userName);
-
-        //Exibe as doações a partir do Id do Usuário recebido
-        minhasDoacoes(userId);
+        // Receber o id do usuário da tela de login
+        int userId = usuarioLogado.getDoadorId();
 
         btnDoar.setOnClickListener(v -> {
             String doacaoValorStr = etDoacao.getText().toString();
@@ -63,6 +65,13 @@ public class TelaDoacao extends AppCompatActivity {
             // Chamar a API para registrar a doação passando os parâmetros Id e Valor
             realizarDoacao(userId, doacaoValor);
         });
+
+        btnEdicaoPerfil.setOnClickListener(v -> {
+            Intent intent2 = new Intent(TelaDoacao.this, MeuPerfil.class);
+            intent2.putExtra("usuarioLogado", usuarioLogado);
+            startActivity(intent2);
+        });
+
 
         btnSair.setOnClickListener(v -> finish());
     }
